@@ -36,6 +36,23 @@ class Compiler {
           data[key] = e.target.value
         })
       }
+      if (node.attributes.hasOwnProperty('v-show')) { // 是否具有v-show属性
+        let attrValue = node.attributes['v-show'].value
+        let keyArr = attrValue.split('.')
+        let data = this.vm
+        while (keyArr.length > 1) { // 对v-show的值进行遍历，获取data的key
+          data = data[keyArr.shift()]
+        }
+        let key = keyArr.shift()
+        new Watcher(data, key, () => { // 创建watcher，并定义watcher更新函数
+          node.style.display = data[key] ? '' : 'none'
+        })
+        node.style.display = data[key] ? '' : 'none'
+      }
+      if (node.attributes.hasOwnProperty('@click')) { // 是否具有@click属性
+        let method = node.attributes['@click'].value
+        node.addEventListener('click', this.vm.$methods[method].bind(this.vm))
+      }
     }
     // 节点为文本节点
     else if (node.nodeType === 3) {
@@ -54,7 +71,8 @@ class Compiler {
         node.textContent = nodeText.replace(reg, data[key])
       }
     }
-    if (node.childNodes.length > 0) { // 若节点存在子节点，则进一步编译子节点
+    // 若节点存在子节点，则进一步编译子节点
+    if (node.childNodes.length > 0) {
       Array.from(node.childNodes).forEach(item => {
         this.compile(item)
       })

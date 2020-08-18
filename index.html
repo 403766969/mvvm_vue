@@ -10,36 +10,37 @@
   <script src="./js/dep.js"></script>
   <script src="./js/watcher.js"></script>
   <script src="./js/compiler.js"></script>
+  <style>
+    #app>div {
+      margin: 10px 0;
+    }
+  </style>
 </head>
 
 <body>
 
   <div id="app">
-    <br>
     <div>
       <span>用户：</span>
       <input type="text" v-model="username">
-      <span>{{username}}</span>
+      <span v-show="isShow">{{username}}</span>
     </div>
-    <br>
     <div>
       <span>密码：</span>
       <input type="text" v-model="password">
-      <span>{{password}}</span>
+      <span v-show="isShow">{{password}}</span>
     </div>
-    <br>
     <div>
       <span>姓名：</span>
       <input type="text" v-model="userInfo.name">
-      <span>{{userInfo.name}}</span>
+      <span v-show="isShow">{{userInfo.name}}</span>
     </div>
-    <br>
     <div>
       <span>年龄：</span>
       <input type="text" v-model="userInfo.age">
-      <span>{{userInfo.age}}</span>
+      <span v-show="isShow">{{userInfo.age}}</span>
     </div>
-    <br>
+    <button @click="btnClick">切换显示</button>
   </div>
 
   <script>
@@ -51,6 +52,12 @@
         userInfo: {
           name: '张三',
           age: 18
+        },
+        isShow: true
+      },
+      methods: {
+        btnClick() {
+          this.isShow = !this.isShow
         }
       }
     })
